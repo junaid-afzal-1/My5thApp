@@ -36,9 +36,30 @@ class MyUser(AbstractBaseUser):
     profile_photo = models.ImageField()
     username = models.CharField(max_length=30,unique=True)
 
+    is_active = models.BooleanField(default=True)
+    staff = models.BooleanField(default=False) # a admin user; non super-user
+    admin = models.BooleanField(default=False)
+
+
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
 
     objects = MyUserManager()
+
+
+
+    def is_staff(self):
+        "Is the user a member of staff?"
+        return self.staff
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        return True
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
 
 
 
